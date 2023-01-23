@@ -1,7 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BatchController;
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\CampusController;
+use App\Http\Controllers\PrefixController;
+use App\Http\Controllers\DepartmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,14 +23,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public Routes
-Route::get('products/search/{name}', [ProductController::class, 'search']);
+// Route::get('products/search/{name}', [ProductController::class, 'search']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
+
 // Private Routes
 Route::group(['middleware'=>['auth:sanctum']], function(){
-    Route::resource('products', ProductController::class);
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::resource('employees', EmployeeController::class);
+    Route::resource('students', StudentController::class);
+    Route::resource('campuses', CampusController::class);
+    Route::resource('batches', BatchController::class);
+    Route::resource('classes', ClassController::class);
+    Route::resource('prefixes', PrefixController::class);
+    Route::resource('departments', DepartmentController::class);
+    Route::resource('users', UserController::class);
 });
 
 
