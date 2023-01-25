@@ -15,8 +15,7 @@ class failTest extends TestCase
      */
     public function test_example()
     {
-        $response = $this->get('/');
-
+        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->get('api/employees/1');
         $response->assertStatus(200);
     }
 }
