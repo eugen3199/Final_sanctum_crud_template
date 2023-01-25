@@ -29,6 +29,8 @@ class AuthController extends Controller
             'token' => $token
         ];
 
+        // $user->assignRole('');
+
         return response($response, 201);
     }
 
