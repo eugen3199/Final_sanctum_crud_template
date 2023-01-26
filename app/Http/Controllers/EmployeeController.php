@@ -14,17 +14,18 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+        //TODO - Validate Data Types and format
         $request->validate([
             'empName'=>'required',
             'empCardID'=>'required'
-            // 'empPosID'=>'',
-            // 'empDeptID'=>'',
-            // 'empJoinDate'=>'',
-            // 'empNRC'=>'',
-            // 'empPhone'=>'',
-            // 'empEmgcPerson'=>'',
-            // 'empEmgcPhone'=>'',
-            // 'empCampusID'=>''
+            'empPosID'=>'required',
+            'empDeptID'=>'required',
+            'empJoinDate'=>'required',
+            'empNRC'=>'required',
+            'empPhone'=>'required',
+            'empEmgcPerson'=>'required',
+            'empEmgcPhone'=>'required',
+            'empCampusID'=>'required'
         ]);
         return Employees::create($request->all());
     }
