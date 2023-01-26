@@ -50,7 +50,15 @@ class EmployeeController extends Controller
 
     public function destroy($id)
     {
-        return Employees::destroy($id);
+        $employee = Employees::destroy($id);
+        if ($employee == 1){
+            return response('Employee with ID:'.$id.' successfully deleted', 200)
+                ->header('Content-Type', 'text/plain');
+        }
+        else{
+            return response('Employee with ID:'.$id.' was not deleted', 404)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 
     public function search($name)
