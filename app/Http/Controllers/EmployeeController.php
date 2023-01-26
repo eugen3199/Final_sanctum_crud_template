@@ -31,7 +31,7 @@ class EmployeeController extends Controller
 
     public function show($id)
     {
-        return Employees::find($id);
+        return Employees::find($id)->firstOrFail();
     }
 
     public function update(Request $request, $id)
