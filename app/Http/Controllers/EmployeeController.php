@@ -31,7 +31,13 @@ class EmployeeController extends Controller
 
     public function show($id)
     {
-        return Employees::find($id)->firstOrFail();
+        $employee = Employees::find($id);
+        if ($employee == Null){
+            return response('Employee with ID:'.$id.' not found.', 404)
+                ->header('Content-Type', 'text/plain');
+        }
+        return $employee;
+        
     }
 
     public function update(Request $request, $id)
