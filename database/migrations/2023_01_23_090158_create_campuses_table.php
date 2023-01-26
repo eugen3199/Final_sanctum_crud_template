@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('campuses', function (Blueprint $table) {
             $table->id();
             $table->string('CampusName');
-            $table->string('CampusPrefixID');
             $table->timestamps();
         });
     }

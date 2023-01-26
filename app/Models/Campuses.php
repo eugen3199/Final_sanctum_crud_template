@@ -11,6 +11,5 @@ class Campuses extends Model
 
     protected $fillable = [
         'campusName',
-        'campusPrefixID'
     ];
 }

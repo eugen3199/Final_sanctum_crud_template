@@ -15,8 +15,7 @@ class CampusController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'campusName'=>'required',
-            'campusPrefixID'=>'required'
+            'campusName'=>'required'
         ]);
         return Campuses::create($request->all());
     }

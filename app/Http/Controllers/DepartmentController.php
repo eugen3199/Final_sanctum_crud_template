@@ -15,7 +15,8 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'deptName'=>'required'
+            'deptName'=>'required',
+            'deptPrefixID'=>'required'
         ]);
         return Departments::create($request->all());
     }
