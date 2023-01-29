@@ -24,9 +24,13 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('kbtc_oid')->plainTextToken;
+
+        $ip = $request->ip();
+        
         $response = [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'ip' => $ip
         ];
 
         // $user->assignRole('');
@@ -50,9 +54,13 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('kbtc_oid')->plainTextToken;
+
+        $ip = $request->ip();
+
         $response = [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'ip' => $ip
         ];
 
         return response($response, 201);
