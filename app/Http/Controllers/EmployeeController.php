@@ -27,7 +27,11 @@ class EmployeeController extends Controller
             'empEmgcPhone'=>'required',
             'empCampusID'=>'required'
         ]);
-        return Employees::create($request->all());
+
+        $response = Employees::create($request->all());
+        $this->controller(QrGenerate::class);
+
+        return $response;
     }
 
     public function show($id)
