@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employees;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -30,7 +32,8 @@ class EmployeeController extends Controller
 
         $response = Employees::create($request->all());
         $qrurl = 'https://id.kbtc.edu.mm/public/employees/'.$request->empCardID;
-        $qrcode = QrCode::size(300)->generate($qrurl);
+        // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, '../public/qrcodes/'.$request->empCardID.'.png');
 
         return $response;
     }
@@ -66,8 +69,8 @@ class EmployeeController extends Controller
         }
     }
 
-    public function search($name)
+    public function search($empCardID)
     {
-        return Employees::where('name', 'like', '%'.$name.'%')->get();
+        return Employees::where('empCardID', $empCardID)->get();
     }
 }
