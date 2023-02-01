@@ -31,7 +31,7 @@ class EmployeeController extends Controller
         ]);
 
         $response = Employees::create($request->all());
-        $qrurl = 'https://id.kbtc.edu.mm/public/employees/'.$request->empCardID;
+        $qrurl = 'https://id.kbtc.edu.mm/public/employee/'.$request->empCardID;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
         QrCode::size(200)->format('png')->generate($qrurl, '../public/qrcodes/'.$request->empCardID.'.png');
 
