@@ -29,7 +29,8 @@ class EmployeeController extends Controller
         ]);
 
         $response = Employees::create($request->all());
-        $this->controller(QrGenerate::class);
+        $qrurl = 'https://id.kbtc.edu.mm/public/employees/'.$request->empCardID;
+        $qrcode = QrCode::size(300)->generate($qrurl);
 
         return $response;
     }
