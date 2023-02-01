@@ -38,7 +38,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::resource('classes', ClassController::class);
     Route::resource('prefixes', PrefixController::class);
     Route::resource('departments', DepartmentController::class);
-    Route::resource('users', UserController::class);
+    // Route::resource('users', UserController::class);
 });
 
 
