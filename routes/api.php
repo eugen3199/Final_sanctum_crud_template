@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('products/search/{name}', [ProductController::class, 'search']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::get('employees/search/{{empCardID}}', [EmployeeController::class, 'search']);
+Route::get('employees/search/{empCardID}', [EmployeeController::class, 'search']);
 
 // Private Routes
 Route::group(['middleware'=>['auth:sanctum']], function(){
