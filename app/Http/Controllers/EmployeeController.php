@@ -27,13 +27,22 @@ class EmployeeController extends Controller
             'empPhone'=>'required',
             'empEmgcPerson'=>'required',
             'empEmgcPhone'=>'required',
-            'empCampusID'=>'required'
+            'empCampusID'=>'required',
+            'empImage'=>'required'
         ]);
 
-        $response = Employees::create($request->all());
+        $response = Employees::create($request->all(), ['except' => ['empImage'] ]);
+
+        //Qr code generate
         $qrurl = 'https://id.kbtc.edu.mm/public/employee/'.$request->empCardID;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
         QrCode::size(200)->format('png')->generate($qrurl, '../public/qrcodes/'.$request->empCardID.'.png');
+
+        //Store Image
+        $imageName = $request->empCardID.$request->image->extension();
+
+        // Public Folder
+        $request->image->move(public_path('empImages'), $imageName);
 
         return $response;
     }
