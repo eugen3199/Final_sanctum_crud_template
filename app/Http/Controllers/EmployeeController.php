@@ -39,7 +39,7 @@ class EmployeeController extends Controller
         QrCode::size(200)->format('png')->generate($qrurl, '../public/qrcodes/'.$request->empCardID.'.png');
 
         //Store Image
-        $imageName = $request->empCardID.$request->image->extension();
+        $imageName = $request->empCardID.$request->empImage->extension();
 
         // Public Folder
         $request->image->move(public_path('empImages'), $imageName);
