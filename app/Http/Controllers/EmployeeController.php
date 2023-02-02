@@ -27,11 +27,12 @@ class EmployeeController extends Controller
             'empPhone'=>'required',
             'empEmgcPerson'=>'required',
             'empEmgcPhone'=>'required',
-            'empCampusID'=>'required'
+            'empCampusID'=>'required',
+            'empKey'=>'required',
         ]);
 
         $response = Employees::create($request->all());
-        $qrurl = 'https://id.kbtc.edu.mm/public/employee/'.$request->empCardID;
+        $qrurl = 'http://127.0.0.1:8000/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
         QrCode::size(200)->format('png')->generate($qrurl, '../public/qrcodes/'.$request->empCardID.'.png');
 
@@ -69,8 +70,13 @@ class EmployeeController extends Controller
         }
     }
 
-    public function search($empCardID)
+    public function search($empCardID, Request $request)
     {
+        $employee = Employees::where('empKey', '=', $request->empKey)->first();
+        if ($employee === null) {
+            return response('Invalid Key', 404)
+            ->header('Content-Type', 'text/plain');
+        }
         return Employees::where('empCardID', $empCardID)->get();
     }
 }

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('empEmgcPerson');
             $table->string('empEmgcPhone');
             $table->integer('empCampusID');
+            $table->string('empKey');
             $table->timestamps();
         });
     }
