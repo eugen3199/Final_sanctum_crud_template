@@ -42,7 +42,7 @@ class EmployeeController extends Controller
         $imageName = $request->empCardID.$request->empImage->extension();
 
         // Public Folder
-        $request->image->move(public_path('empImages'), $imageName);
+        $request->image->move(public_path('empImage'), $imageName);
 
         return $response;
     }
