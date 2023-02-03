@@ -27,11 +27,11 @@ class AuthController extends Controller
             $client="mysql2";
         }
 
-        $user = Users::create([
+        $user = Users::on($client)->create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password'])
-        ])->setConnectionto($client);
+        ]);
 
         $token = $user->createToken('kbtc_oid')->plainTextToken;
 
