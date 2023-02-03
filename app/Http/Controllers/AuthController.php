@@ -66,7 +66,7 @@ class AuthController extends Controller
             $client="mysql2";
         }
 
-        $user = Users::on($client)->connection($client)->where('email', $fields['email'])->first();
+        $user = Users::on($client)->where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
