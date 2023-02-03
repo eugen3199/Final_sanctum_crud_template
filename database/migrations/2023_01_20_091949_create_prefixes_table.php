@@ -13,7 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prefixes', function (Blueprint $table) {
+        Schema::connection('mysql')->create('prefixes', function (Blueprint $table) {
+            $table->id();
+            $table->string('prefixName');
+            $table->timestamps();
+        });
+
+        Schema::connection('mysql2')->create('prefixes', function (Blueprint $table) {
             $table->id();
             $table->string('prefixName');
             $table->timestamps();

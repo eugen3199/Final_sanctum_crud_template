@@ -13,7 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::connection('mysql')->create('classes', function (Blueprint $table) {
+            $table->id();
+            $table->string('className');
+            $table->string('classPrefixID');
+            $table->timestamps();
+        });
+
+        Schema::connection('mysql2')->create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('className');
             $table->string('classPrefixID');

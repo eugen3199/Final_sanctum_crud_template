@@ -29,6 +29,7 @@ class EmployeeController extends Controller
             'empEmgcPhone'=>'required',
             'empCampusID'=>'required',
             'empKey'=>'required',
+            'empStatus'=>'required',
         ]);
 
         $response = Employees::create($request->all());
@@ -77,7 +78,7 @@ class EmployeeController extends Controller
             ['empCardID', '=', $empCardID]
         ])->first();
         if ($employee === null) {
-            return response('Invalid Key', 404)
+            return response('Invalid Key or ID', 404)
             ->header('Content-Type', 'text/plain');
         }
         return Employees::where('empCardID', $empCardID)->get();

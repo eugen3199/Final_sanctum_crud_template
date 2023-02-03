@@ -13,10 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::connection('mysql')->create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('deptName');
-            $table->integer('deptPrefixID');
+            $table->timestamps();
+        });
+
+        Schema::connection('mysql2')->create('departments', function (Blueprint $table) {
+            $table->id();
+            $table->string('deptName');
             $table->timestamps();
         });
     }
