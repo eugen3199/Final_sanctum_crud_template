@@ -89,7 +89,7 @@ class EmployeeController extends Controller
         return $Employee;
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
         $client='';
 
