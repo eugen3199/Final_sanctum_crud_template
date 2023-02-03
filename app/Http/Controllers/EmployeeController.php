@@ -9,9 +9,18 @@ use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Employees::all();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql";
+        }
+        else{
+            $client="mysql2";
+        }
+
+        return Employees::on($client)->all();
     }
 
     public function store(Request $request)
