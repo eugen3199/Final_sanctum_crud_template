@@ -40,7 +40,8 @@ class AuthController extends Controller
         $response = [
             'user' => $user,
             'token' => $token,
-            'ip' => $ip
+            'ip' => $ip,
+            'client' => $fields['client']
         ];
 
         // $user->assignRole('');
