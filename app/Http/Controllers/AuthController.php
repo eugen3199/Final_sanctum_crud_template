@@ -14,10 +14,20 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed',
+            'client' => 'required'
         ]);
 
-        $user = Users::create([
+        $client='';
+
+        if($fields['client']=='kbtc'){
+            $client="mysql";
+        }
+        else{
+            $client="mysql2";
+        }
+
+        $user = Users::connection($client)->create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password'])
@@ -45,7 +55,16 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        $user = Users::where('email', $fields['email'])->first();
+        $client='';
+
+        if($fields['client']=='kbtc'){
+            $client="mysql";
+        }
+        else{
+            $client="mysql2";
+        }
+
+        $user = Users::connection($client)->where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
@@ -68,7 +87,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql";
+        }
+        else{
+            $client="mysql2";
+        }
+
+        connection($client)->auth()->user()->tokens()->delete();
         return response([
             'message' => 'Logged out'
         ]);

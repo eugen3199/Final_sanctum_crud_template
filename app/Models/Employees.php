@@ -20,6 +20,7 @@ class Employees extends Model
         'empEmgcPerson',
         'empEmgcPhone',
         'empCampusID',
-        'empKey'
+        'empKey',
+        'empStatus'
     ];
 }
