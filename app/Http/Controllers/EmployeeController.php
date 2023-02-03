@@ -32,9 +32,9 @@ class EmployeeController extends Controller
         ]);
 
         $response = Employees::create($request->all());
-        $qrurl = 'http://127.0.0.1:8000/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
+        $qrurl = 'https://idserver.kbtc.edu.mm/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, '../public/qrcodes/'.$request->empCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/').$request->empCardID.'.png');
 
         return $response;
     }
