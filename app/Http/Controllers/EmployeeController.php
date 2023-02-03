@@ -45,7 +45,7 @@ class EmployeeController extends Controller
             $domain="id.isr.edu.mm";
         }
 
-        $response = Employees::connection($client)->create($request->all());
+        $response = Employees::on($client)->create($request->all());
         $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
         QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/').$request->empCardID.'.png');
@@ -64,7 +64,7 @@ class EmployeeController extends Controller
             $client="mysql2";
         }
 
-        $employee = Employees::connection($client)->find($id);
+        $employee = Employees::on($client)->find($id);
         if ($employee == Null){
             return response('Employee with ID:'.$id.' not found.', 404)
                 ->header('Content-Type', 'text/plain');
@@ -84,7 +84,7 @@ class EmployeeController extends Controller
             $client="mysql2";
         }
 
-        $Employee = Employees::connection($client)->find($id);
+        $Employee = Employees::on($client)->find($id);
         $Employee->update($request->all());
         return $Employee;
     }
@@ -100,7 +100,7 @@ class EmployeeController extends Controller
             $client="mysql2";
         }
 
-        $employee = Employees::connection($client)->destroy($id);
+        $employee = Employees::on($client)->destroy($id);
         if ($employee == 1){
             return response('Employee with ID:'.$id.' successfully deleted', 200)
                 ->header('Content-Type', 'text/plain');
@@ -122,7 +122,7 @@ class EmployeeController extends Controller
             $client="mysql2";
         }
 
-        $employee = Employees::connection($client)->where([
+        $employee = Employees::on($client)->where([
             ['empKey', '=', $request->empKey],
             ['empCardID', '=', $empCardID]
         ])->first();

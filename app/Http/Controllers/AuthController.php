@@ -41,7 +41,7 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
             'ip' => $ip,
-            'client' => $fields['client']
+            'client' => $client
         ];
 
         // $user->assignRole('');
@@ -65,7 +65,7 @@ class AuthController extends Controller
             $client="mysql2";
         }
 
-        $user = Users::connection($client)->where('email', $fields['email'])->first();
+        $user = Users::on($client)->connection($client)->where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
@@ -97,7 +97,7 @@ class AuthController extends Controller
             $client="mysql2";
         }
 
-        connection($client)->auth()->user()->tokens()->delete();
+        on($client)->auth()->user()->tokens()->delete();
         return response([
             'message' => 'Logged out'
         ]);
