@@ -72,7 +72,10 @@ class EmployeeController extends Controller
 
     public function search($empCardID, Request $request)
     {
-        $employee = Employees::where('empKey', '=', $request->empKey)->first();
+        $employee = Employees::where([
+            ['empKey', '=', $request->empKey],
+            ['empCardID', '=', $empCardID]
+        ])->first();
         if ($employee === null) {
             return response('Invalid Key', 404)
             ->header('Content-Type', 'text/plain');
