@@ -15,13 +15,14 @@ class AuthController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|unique:mysql.users,email',
             'password' => 'required|string|confirmed',
-            // 'client' => 'required'
+            'client' => 'required'
         ]);
 
         $user = Users::on('mysql')->create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
+            'password' => bcrypt($fields['password']),
+            'client' => $fields['client'],
         ]);
 
         $token = $user->createToken('kbtc_oid')->plainTextToken;
