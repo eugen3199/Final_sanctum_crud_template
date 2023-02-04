@@ -136,6 +136,6 @@ class EmployeeController extends Controller
             return response('Invalid Key or ID', 404)
             ->header('Content-Type', 'text/plain');
         }
-        return Employees::connection($client)->where('empCardID', $empCardID)->get();
+        return Employees::on($client)->where('empCardID', $empCardID)->get();
     }
 }
