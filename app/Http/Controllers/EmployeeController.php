@@ -14,13 +14,13 @@ class EmployeeController extends Controller
         $client='';
 
         if($request->client=='kbtc'){
-            $client="mysql";
-        }
-        else{
             $client="mysql2";
         }
+        else{
+            $client="mysql3";
+        }
 
-        return Employees::on($client)->all();
+        return Employees::on($client)->get();
     }
 
     public function store(Request $request)
@@ -46,11 +46,11 @@ class EmployeeController extends Controller
         $domain='';
 
         if($request->client=='kbtc'){
-            $client="mysql";
+            $client="mysql2";
             $domain="id.kbtc.edu.mm";
         }
         else{
-            $client="mysql2";
+            $client="mysql3";
             $domain="id.isr.edu.mm";
         }
 
@@ -67,10 +67,10 @@ class EmployeeController extends Controller
         $client='';
 
         if($request->client=='kbtc'){
-            $client="mysql";
+            $client="mysql2";
         }
         else{
-            $client="mysql2";
+            $client="mysql3";
         }
 
         $employee = Employees::on($client)->find($id);
@@ -87,10 +87,10 @@ class EmployeeController extends Controller
         $client='';
 
         if($request->client=='kbtc'){
-            $client="mysql";
+            $client="mysql2";
         }
         else{
-            $client="mysql2";
+            $client="mysql3";
         }
 
         $Employee = Employees::on($client)->find($id);
@@ -103,10 +103,10 @@ class EmployeeController extends Controller
         $client='';
 
         if($request->client=='kbtc'){
-            $client="mysql";
+            $client="mysql2";
         }
         else{
-            $client="mysql2";
+            $client="mysql3";
         }
 
         $employee = Employees::on($client)->destroy($id);
@@ -125,10 +125,10 @@ class EmployeeController extends Controller
         $client='';
 
         if($request->client=='kbtc'){
-            $client="mysql";
+            $client="mysql2";
         }
         else{
-            $client="mysql2";
+            $client="mysql3";
         }
 
         $employee = Employees::on($client)->where([

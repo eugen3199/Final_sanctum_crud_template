@@ -11,23 +11,14 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql";
-        }
-        else{
-            $client="mysql2";
-        }
-
         $fields = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|unique:'.$client.'.users,email',
+            'email' => 'required|string|unique:mysql.users,email',
             'password' => 'required|string|confirmed',
-            'client' => 'required'
+            // 'client' => 'required'
         ]);
 
-        $user = Users::on($client)->create([
+        $user = Users::on('mysql')->create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password'])
@@ -35,13 +26,13 @@ class AuthController extends Controller
 
         $token = $user->createToken('kbtc_oid')->plainTextToken;
 
-        $ip = $request->ip();
+        // $ip = $request->ip();
         
         $response = [
             'user' => $user,
-            'token' => $token,
-            'ip' => $ip,
-            'client' => $client
+            'token' => $token
+            // 'ip' => $ip
+            // 'client' => $client
         ];
 
         // $user->assignRole('');
@@ -54,19 +45,10 @@ class AuthController extends Controller
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
-            'client' => 'required'
+            // 'client' => 'required'
         ]);
 
-        $client='';
-
-        if($fields['client']=='kbtc'){
-            $client="mysql";
-        }
-        else{
-            $client="mysql2";
-        }
-
-        $user = Users::on($client)->where('email', $fields['email'])->first();
+        $user = Users::on('mysql')->where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
@@ -80,8 +62,8 @@ class AuthController extends Controller
 
         $response = [
             'user' => $user,
-            'token' => $token,
-            'ip' => $ip
+            'token' => $token
+            // 'ip' => $ip
         ];
 
         return response($response, 201);
@@ -89,16 +71,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql";
-        }
-        else{
-            $client="mysql2";
-        }
-
-        on($client)->auth()->user()->tokens()->delete();
+        auth()->user()->tokens()->delete();
         return response([
             'message' => 'Logged out'
         ]);

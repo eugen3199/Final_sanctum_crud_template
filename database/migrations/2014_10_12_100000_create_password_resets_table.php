@@ -18,12 +18,6 @@ return new class extends Migration
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
-
-        Schema::connection('mysql2')->create('password_resets', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
     }
 
     /**
