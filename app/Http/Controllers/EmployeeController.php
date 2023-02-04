@@ -20,7 +20,7 @@ class EmployeeController extends Controller
             $client="mysql3";
         }
 
-        return Employees::on($client)->get();
+        return Employees::on($client)->orderBy('empCardID', 'desc')->get();
     }
 
     public function store(Request $request)
