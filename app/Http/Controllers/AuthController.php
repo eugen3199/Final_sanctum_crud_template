@@ -11,21 +11,21 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed',
-            'client' => 'required'
-        ]);
-
         $client='';
 
-        if($fields['client']=='kbtc'){
+        if($request->client=='kbtc'){
             $client="mysql";
         }
         else{
             $client="mysql2";
         }
+
+        $fields = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|unique:'.$client.'.users,email',
+            'password' => 'required|string|confirmed',
+            'client' => 'required'
+        ]);
 
         $user = Users::on($client)->create([
             'name' => $fields['name'],
