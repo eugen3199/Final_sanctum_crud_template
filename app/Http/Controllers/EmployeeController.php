@@ -40,7 +40,7 @@ class EmployeeController extends Controller
         //TODO - Validate Data Types and format
         $request->validate([
             'empName'=>'required',
-            'empCardID'=>'required|string|unique:'.$client.'.employees,email',
+            'empCardID'=>'required|string|unique:'.$client.'.employees,empCardID',
             'empPosID'=>'required',
             'empDeptID'=>'required',
             'empJoinDate'=>'required',
