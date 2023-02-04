@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Students;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -24,12 +25,15 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $client='';
+        $domain='';
 
         if($request->client=='kbtc'){
             $client="mysql2";
+            $domain="id.kbtc.edu.mm";
         }
         else{
             $client="mysql3";
+            $domain="id.isr.edu.mm";
         }
 
         $request->validate([
@@ -45,6 +49,11 @@ class StudentController extends Controller
             'studKey'=>'required',
             'studStatus'=>'required',
         ]);
+
+        $qrurl = 'https://'.$domain.'/public/student/'.$request->studCardID.'?studKey='.$request->studKey;
+        // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/').$request->studCardID.'.png');
+
         return Students::on($client)->create($request->all());
     }
 
