@@ -25,10 +25,22 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+        $client='';
+        $domain='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+            $domain="id.kbtc.edu.mm";
+        }
+        else{
+            $client="mysql3";
+            $domain="id.isr.edu.mm";
+        }
+
         //TODO - Validate Data Types and format
         $request->validate([
             'empName'=>'required',
-            'empCardID'=>'required',
+            'empCardID'=>'required|string|unique:'.$client.'.users,email',
             'empPosID'=>'required',
             'empDeptID'=>'required',
             'empJoinDate'=>'required',
@@ -41,18 +53,6 @@ class EmployeeController extends Controller
             'empStatus'=>'required',
             'client'=>'required',
         ]);
-
-        $client='';
-        $domain='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-            $domain="id.kbtc.edu.mm";
-        }
-        else{
-            $client="mysql3";
-            $domain="id.isr.edu.mm";
-        }
 
         $response = Employees::on($client)->create($request->all());
         $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
