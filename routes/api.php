@@ -8,6 +8,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\PrefixController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PositionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::resource('classes', ClassController::class);
     Route::resource('prefixes', PrefixController::class);
     Route::resource('departments', DepartmentController::class);
+    Route::resource('positions', PositionController::class);
     // Route::resource('users', UserController::class);
 });
 

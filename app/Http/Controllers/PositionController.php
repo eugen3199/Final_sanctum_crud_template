@@ -18,7 +18,7 @@ class PositionController extends Controller
             $client="mysql3";
         }
 
-        return Departments::on($client)->all();
+        return Positions::on($client)->get();
     }
 
     public function store(Request $request)
@@ -33,10 +33,10 @@ class PositionController extends Controller
         }
 
         $request->validate([
-            'deptName'=>'required',
-            'deptPrefixID'=>'required'
+            'posName'=>'required'
         ]);
-        return Departments::on($client)->create($request->all());
+
+        return Positions::on($client)->create($request->all());
     }
 
     public function show($id, Request $request)
@@ -50,7 +50,7 @@ class PositionController extends Controller
             $client="mysql3";
         }
 
-        return Departments::on($client)->find($id);
+        return Positions::on($client)->find($id);
     }
 
     public function update(Request $request, $id)
@@ -64,7 +64,7 @@ class PositionController extends Controller
             $client="mysql3";
         }
         
-        $Department = Departments::on($client)->find($id);
+        $Department = Positions::on($client)->find($id);
         $Department->update($request->all());
         return $Department;
     }
@@ -80,7 +80,7 @@ class PositionController extends Controller
             $client="mysql3";
         }
 
-        return Departments::destroy($id);
+        return Positions::destroy($id);
     }
 
     public function search($name)
@@ -94,6 +94,6 @@ class PositionController extends Controller
             $client="mysql3";
         }
         
-        return Departments::on($client)->where('name', 'like', '%'.$name.'%')->get();
+        return Positions::on($client)->where('name', 'like', '%'.$name.'%')->get();
     }
 }

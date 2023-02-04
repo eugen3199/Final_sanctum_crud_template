@@ -46,7 +46,7 @@ class AuthController extends Controller
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
-            // 'client' => 'required'
+            'client' => 'required'
         ]);
 
         $user = Users::on('mysql')->where('email', $fields['email'])->first();
