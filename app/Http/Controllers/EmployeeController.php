@@ -131,10 +131,7 @@ class EmployeeController extends Controller
             $client="mysql3";
         }
 
-        $employee = Employees::on($client)->where([
-            ['empKey', '=', $request->empKey],
-            ['empCardID', '=', $empCardID]
-        ])->first();
+        $employee = Employees::on($client)->where('empKey', '=', $request->empKey)->where('empCardID','=',$empCardID)->first();
         if ($employee === null) {
             return response('Invalid Key or ID', 404)
             ->header('Content-Type', 'text/plain');
