@@ -113,6 +113,11 @@ class StudentController extends Controller
             $client="mysql3";
         }
 
-        return Students::on($client)->where('name', 'like', '%'.$name.'%')->get();
+        $student = Students::on($client)->where('studKey', '=', $request->empKey)->where('studCardID','=',$studCardID)->first();
+        if ($student === null) {
+            return response('Invalid Key or ID', 404)
+            ->header('Content-Type', 'text/plain');
+        }
+        return Students::on($client)->where('studCardID', $studCardID)->get();
     }
 }
