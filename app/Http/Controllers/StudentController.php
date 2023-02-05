@@ -102,7 +102,7 @@ class StudentController extends Controller
         return Students::on($client)->destroy($id);
     }
 
-    public function search($name, Request $request)
+    public function search($studCardID, Request $request)
     {
         $client='';
 
