@@ -113,7 +113,7 @@ class StudentController extends Controller
             $client="mysql3";
         }
 
-        $student = Students::on($client)->where('studKey', '=', $request->empKey)->where('studCardID','=',$studCardID)->first();
+        $student = Students::on($client)->where('studKey', '=', $request->studKey)->where('studCardID','=',$studCardID)->first();
         if ($student === null) {
             return response('Invalid Key or ID', 404)
             ->header('Content-Type', 'text/plain');
