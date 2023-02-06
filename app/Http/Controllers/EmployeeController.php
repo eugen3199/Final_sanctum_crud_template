@@ -57,7 +57,7 @@ class EmployeeController extends Controller
         $response = Employees::on($client)->create($request->all());
         $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/').$request->empCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/employees/').$request->empCardID.'.png');
 
         return $response;
     }
