@@ -53,7 +53,7 @@ class StudentController extends Controller
 
         $qrurl = 'https://'.$domain.'/public/student/'.$request->studCardID.'?studKey='.$request->studKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/students/').$request->studCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/students/qrcodes/').$request->studCardID.'.png');
 
         return Students::on($client)->create($request->all());
     }
