@@ -39,8 +39,8 @@ class StudentController extends Controller
 
         $request->validate([
             'studName'=>'required',
-            'studCardID'=>'required',
-            'studClassID'=>'required|string|unique:'.$client.'.students,studCardID',
+            'studCardID'=>'required|string|unique:'.$client.'.students,studCardID',
+            'studClassID'=>'required',
             'studBatchID'=>'required',
             'studGuardName'=>'required',
             'studDoB'=>'required',
