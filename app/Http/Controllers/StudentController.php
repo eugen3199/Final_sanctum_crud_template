@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Students;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
@@ -101,7 +102,7 @@ class StudentController extends Controller
         return Students::on($client)->destroy($id);
     }
 
-    public function search($name, Request $request)
+    public function search($studCardID, Request $request)
     {
         $client='';
 
@@ -112,6 +113,11 @@ class StudentController extends Controller
             $client="mysql3";
         }
 
-        return Students::on($client)->where('name', 'like', '%'.$name.'%')->get();
+        $student = Students::on($client)->where('studKey', '=', $request->studKey)->where('studCardID','=',$studCardID)->first();
+        if ($student === null) {
+            return response('Invalid Key or ID', 404)
+            ->header('Content-Type', 'text/plain');
+        }
+        return Students::on($client)->where('studCardID', $studCardID)->get();
     }
 }
