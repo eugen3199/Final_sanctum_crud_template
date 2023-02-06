@@ -7,23 +7,45 @@ use App\Models\Batches;
 
 class BatchController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Batches::all();
+
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Batches::on($client)->get();
     }
 
     public function store(Request $request)
     {
+        $client='';
+        $domain='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+            $domain="id.kbtc.edu.mm";
+        }
+        else{
+            $client="mysql3";
+            $domain="id.isr.edu.mm";
+        }
+
         $request->validate([
             'batchName'=>'required',
-            'batchClassID'=>'required'
+            'batchClassID'=>'required',
+            'client'=>'required',
         ]);
-        return Batches::on($client)->create($request->all());
-    }
 
-    public function show($id)
-    {
-        return Batches::find($id);
+        return Batches::on($client)->create([
+            'batchName'=>$request->batchName,
+            'batchClassID'=>$request->batchClassID
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -36,10 +58,5 @@ class BatchController extends Controller
     public function destroy($id)
     {
         return Batches::on($client)->destroy($id);
-    }
-
-    public function search($name)
-    {
-        return Batches::on($client)->where('name', 'like', '%'.$name.'%')->get();
     }
 }

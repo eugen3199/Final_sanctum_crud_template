@@ -4,26 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Classes;
+use App\Models\Prefixes;
 
 class ClassController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Classes::all();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Classes::on($client)->get();
     }
 
     public function store(Request $request)
     {
+        $client='';
+        $domain='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+            $domain="id.kbtc.edu.mm";
+        }
+        else{
+            $client="mysql3";
+            $domain="id.isr.edu.mm";
+        }
+
         $request->validate([
             'className'=>'required',
-            'classPrefixID'=>'required'
+            'client'=>'required',
+            'prefixName'=>'required',
         ]);
-        return Classes::create($request->all());
-    }
 
-    public function show($id)
-    {
-        return Classes::find($id);
+        $prefix =  Prefixes::on($client)->create([
+            'prefixName'=>$request->prefixName
+        ]);
+        return Classes::on($client)->create([
+            'className'=>$request->className,
+            'classPrefixID'=>$prefix->id
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -36,10 +61,5 @@ class ClassController extends Controller
     public function destroy($id)
     {
         return Classes::destroy($id);
-    }
-
-    public function search($name)
-    {
-        return Classes::where('name', 'like', '%'.$name.'%')->get();
     }
 }
