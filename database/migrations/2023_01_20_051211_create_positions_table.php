@@ -13,7 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('positions', function (Blueprint $table) {
+        Schema::connection('mysql3')->create('positions', function (Blueprint $table) {
+            $table->id();
+            $table->string('posName');
+            $table->timestamps();
+        });
+
+        Schema::connection('mysql2')->create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('posName');
             $table->timestamps();

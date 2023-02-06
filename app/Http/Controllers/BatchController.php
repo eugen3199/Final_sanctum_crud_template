@@ -18,7 +18,7 @@ class BatchController extends Controller
             'batchName'=>'required',
             'batchClassID'=>'required'
         ]);
-        return Batches::create($request->all());
+        return Batches::on($client)->create($request->all());
     }
 
     public function show($id)
@@ -28,18 +28,18 @@ class BatchController extends Controller
 
     public function update(Request $request, $id)
     {
-        $Batch = Batches::find($id);
+        $Batch = Batches::on($client)->find($id);
         $Batch->update($request->all());
         return $Batch;
     }
 
     public function destroy($id)
     {
-        return Batches::destroy($id);
+        return Batches::on($client)->destroy($id);
     }
 
     public function search($name)
     {
-        return Batches::where('name', 'like', '%'.$name.'%')->get();
+        return Batches::on($client)->where('name', 'like', '%'.$name.'%')->get();
     }
 }

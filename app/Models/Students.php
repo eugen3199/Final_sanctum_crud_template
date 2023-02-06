@@ -18,6 +18,8 @@ class Students extends Model
         'studDoB',
         'studEmgcPhone1',
         'studEmgcPhone2',
-        'SchoolEmgcCall'
+        'SchoolEmgcCall',
+        'studKey',
+        'studStatus'
     ];
 }

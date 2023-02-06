@@ -9,17 +9,38 @@ use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Employees::all();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Employees::on($client)->orderBy('empCardID', 'desc')->get();
     }
 
     public function store(Request $request)
     {
+        $client='';
+        $domain='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+            $domain="id.kbtc.edu.mm";
+        }
+        else{
+            $client="mysql3";
+            $domain="id.isr.edu.mm";
+        }
+
         //TODO - Validate Data Types and format
         $request->validate([
             'empName'=>'required',
-            'empCardID'=>'required',
+            'empCardID'=>'required|string|unique:'.$client.'.employees,empCardID',
             'empPosID'=>'required',
             'empDeptID'=>'required',
             'empJoinDate'=>'required',
@@ -29,19 +50,30 @@ class EmployeeController extends Controller
             'empEmgcPhone'=>'required',
             'empCampusID'=>'required',
             'empKey'=>'required',
+            'empStatus'=>'required',
+            'client'=>'required',
         ]);
 
-        $response = Employees::create($request->all());
-        $qrurl = 'https://id.kbtc.edu.mm/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
+        $response = Employees::on($client)->create($request->all());
+        $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/').$request->empCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/qrcodes/employees/').$request->empCardID.'.png');
 
         return $response;
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $employee = Employees::find($id);
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $employee = Employees::on($client)->find($id);
         if ($employee == Null){
             return response('Employee with ID:'.$id.' not found.', 404)
                 ->header('Content-Type', 'text/plain');
@@ -52,34 +84,58 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        $Employee = Employees::find($id);
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $Employee = Employees::on($client)->find($id);
         $Employee->update($request->all());
         return $Employee;
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $employee = Employees::destroy($id);
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $employee = Employees::on($client)->destroy($id);
         if ($employee == 1){
             return response('Employee with ID:'.$id.' successfully deleted', 200)
                 ->header('Content-Type', 'text/plain');
         }
         else{
-            return response('Employee with ID:'.$id.' was not deleted', 404)
+            return response('Employee with ID:'.$id.' does not exist', 404)
                 ->header('Content-Type', 'text/plain');
         }
     }
 
     public function search($empCardID, Request $request)
     {
-        $employee = Employees::where([
-            ['empKey', '=', $request->empKey],
-            ['empCardID', '=', $empCardID]
-        ])->first();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $employee = Employees::on($client)->where('empKey', '=', $request->empKey)->where('empCardID','=',$empCardID)->first();
         if ($employee === null) {
-            return response('Invalid Key', 404)
+            return response('Invalid Key or ID', 404)
             ->header('Content-Type', 'text/plain');
         }
-        return Employees::where('empCardID', $empCardID)->get();
+        return Employees::on($client)->where('empCardID', $empCardID)->get();
     }
 }

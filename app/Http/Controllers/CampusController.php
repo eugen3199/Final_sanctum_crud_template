@@ -7,38 +7,93 @@ use App\Models\Campuses;
 
 class CampusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Campuses::all();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Campuses::on($client)->all();
     }
 
     public function store(Request $request)
     {
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
         $request->validate([
             'campusName'=>'required'
         ]);
-        return Campuses::create($request->all());
+
+        return Campuses::on($client)->create($request->all());
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return Campuses::find($id);
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Campuses::on($client)->find($id);
     }
 
     public function update(Request $request, $id)
     {
-        $Campus = Campuses::find($id);
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $Campus = Campuses::on($client)->find($id);
         $Campus->update($request->all());
         return $Campus;
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        return Campuses::destroy($id);
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Campuses::on($client)->destroy($id);
     }
 
-    public function search($name)
+    public function search($name, Request $request)
     {
-        return Campuses::where('name', 'like', '%'.$name.'%')->get();
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        return Campuses::on($client)->where('name', 'like', '%'.$name.'%')->get();
     }
 }

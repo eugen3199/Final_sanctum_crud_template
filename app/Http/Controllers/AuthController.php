@@ -13,24 +13,27 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
+            'email' => 'required|string|unique:mysql.users,email',
+            'password' => 'required|string|confirmed',
+            'client' => 'required'
         ]);
 
-        $user = Users::create([
+        $user = Users::on('mysql')->create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
+            'password' => bcrypt($fields['password']),
+            'client' => $fields['client'],
         ]);
 
         $token = $user->createToken('kbtc_oid')->plainTextToken;
 
-        $ip = $request->ip();
+        // $ip = $request->ip();
         
         $response = [
             'user' => $user,
-            'token' => $token,
-            'ip' => $ip
+            'token' => $token
+            // 'ip' => $ip
+            // 'client' => $client
         ];
 
         // $user->assignRole('');
@@ -42,10 +45,11 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'email' => 'required|string',
-            'password' => 'required|string'
+            'password' => 'required|string',
+            'client' => 'required'
         ]);
 
-        $user = Users::where('email', $fields['email'])->first();
+        $user = Users::on('mysql')->where('email', $fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
@@ -59,8 +63,8 @@ class AuthController extends Controller
 
         $response = [
             'user' => $user,
-            'token' => $token,
-            'ip' => $ip
+            'token' => $token
+            // 'ip' => $ip
         ];
 
         return response($response, 201);
