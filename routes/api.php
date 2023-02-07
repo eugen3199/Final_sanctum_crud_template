@@ -29,6 +29,9 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::get('employees/search/{empCardID}', [EmployeeController::class, 'search']);
 Route::get('students/search/{studCardID}', [StudentController::class, 'search']);
+Route::get('classes/search/{id}', [ClassController::class, 'search']);
+Route::get('batches/search/{id}', [BatchController::class, 'search']);
+Route::get('prefixes/search/{id}', [PrefixController::class, 'search']);
 
 // Private Routes
 Route::group(['middleware'=>['auth:sanctum']], function(){

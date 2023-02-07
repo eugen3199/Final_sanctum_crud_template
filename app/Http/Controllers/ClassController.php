@@ -62,4 +62,23 @@ class ClassController extends Controller
     {
         return Classes::destroy($id);
     }
+
+    public function search($id, Request $request)
+    {
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $class = Classes::on($client)->where('id','=',$id)->first();
+        if ($class === null) {
+            return response('Invalid ID', 404)
+            ->header('Content-Type', 'text/plain');
+        }
+        return $class;
+    }
 }

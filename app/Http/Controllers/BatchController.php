@@ -59,4 +59,23 @@ class BatchController extends Controller
     {
         return Batches::on($client)->destroy($id);
     }
+
+    public function search($id, Request $request)
+    {
+        $client='';
+
+        if($request->client=='kbtc'){
+            $client="mysql2";
+        }
+        else{
+            $client="mysql3";
+        }
+
+        $batch = Batches::on($client)->where('id','=',$id)->first();
+        if ($batch === null) {
+            return response('Invalid ID', 404)
+            ->header('Content-Type', 'text/plain');
+        }
+        return $batch;
+    }
 }
