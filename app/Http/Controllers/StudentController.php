@@ -20,7 +20,15 @@ class StudentController extends Controller
             $client="mysql3";
         }
 
-        return Students::on($client)->orderBy('studCardID', 'desc')->get();
+        if($request->studClassID=='*'){
+            return Students::on($client)->orderBy('studCardID', 'desc')->get();
+        }
+        else{
+            return Students::on($client)
+                ->orderBy('studCardID', 'desc')
+                ->where('studClassID', '=', $request->studClassID)
+                ->get();
+        }
     }
 
     public function store(Request $request)
