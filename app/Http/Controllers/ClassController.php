@@ -42,12 +42,23 @@ class ClassController extends Controller
             'prefixName'=>'required',
         ]);
 
-        $prefix =  Prefixes::on($client)->create([
-            'prefixName'=>$request->prefixName
-        ]);
+        $prefix_exists = Prefixes::on($client)->where('prefixName','=',$request->prefixName)->first();
+        
+        $prefix_id = 0;
+
+        if($prefix_exists == null){
+            $prefix =  Prefixes::on($client)->create([
+                'prefixName'=>$request->prefixName
+            ]);
+            $prefix_id = $prefix->id;
+        }
+        else{
+            $prefix_id = $prefix_exists->id;
+        }
+
         return Classes::on($client)->create([
             'className'=>$request->className,
-            'classPrefixID'=>$prefix->id
+            'classPrefixID'=>$prefix_id
         ]);
     }
 
