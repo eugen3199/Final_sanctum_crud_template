@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Departments;
+use App\Models\Prefixes;
 
 class DepartmentController extends Controller
 {
@@ -18,7 +19,7 @@ class DepartmentController extends Controller
             $client="mysql3";
         }
 
-        return Departments::on($client)->all();
+        return Departments::on($client)->get();
     }
 
     public function store(Request $request)
@@ -34,9 +35,27 @@ class DepartmentController extends Controller
 
         $request->validate([
             'deptName'=>'required',
-            'deptPrefixID'=>'required'
+            'prefixName'=>'required'
         ]);
-        return Departments::on($client)->create($request->all());
+
+        $prefix_exists = Prefixes::on($client)->where('prefixName','=',$request->prefixName)->first();
+        
+        $prefix_id = 0;
+
+        if($prefix_exists == null){
+            $prefix =  Prefixes::on($client)->create([
+                'prefixName'=>$request->prefixName
+            ]);
+            $prefix_id = $prefix->id;
+        }
+        else{
+            $prefix_id = $prefix_exists->id;
+        }
+
+        return Departments::on($client)->create([
+            'deptName'=>$request->deptName,
+            'deptPrefixID'=>$prefix_id
+        ]);
     }
 
     public function show($id, Request $request)

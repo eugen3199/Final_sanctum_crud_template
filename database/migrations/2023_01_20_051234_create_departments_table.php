@@ -16,12 +16,14 @@ return new class extends Migration
         Schema::connection('mysql3')->create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('deptName');
+            $table->string('deptPrefixID');
             $table->timestamps();
         });
 
         Schema::connection('mysql2')->create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('deptName');
+            $table->string('deptPrefixID');
             $table->timestamps();
         });
     }

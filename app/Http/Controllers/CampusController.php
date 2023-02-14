@@ -18,7 +18,7 @@ class CampusController extends Controller
             $client="mysql3";
         }
 
-        return Campuses::on($client)->all();
+        return Campuses::on($client)->get();
     }
 
     public function store(Request $request)
