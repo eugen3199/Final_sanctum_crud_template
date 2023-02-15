@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('SchoolEmgcCall');
             $table->string('studKey');
             $table->boolean('studStatus');
+            $table->string('studQR');
+            $table->string('studProfileImg');
             $table->timestamps();
         });
 
@@ -42,6 +44,8 @@ return new class extends Migration
             $table->string('SchoolEmgcCall');
             $table->string('studKey');
             $table->boolean('studStatus');
+            $table->string('studQR');
+            $table->string('studProfileImg');
             $table->timestamps();
         });
     }
