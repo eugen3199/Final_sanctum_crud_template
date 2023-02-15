@@ -52,13 +52,14 @@ class EmployeeController extends Controller
             'empKey'=>'required',
             'empStatus'=>'required',
             'empQR'=>'required',
+            'studProfileImg'=>'nullable',
             'client'=>'required',
         ]);
 
         $response = Employees::on($client)->create($request->all());
         $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/employees/qrcodes/').$request->empCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/employees/qrcodes/').$request->empQR);
 
         return $response;
     }

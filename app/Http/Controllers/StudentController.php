@@ -59,11 +59,13 @@ class StudentController extends Controller
             'SchoolEmgcCall'=>'required',
             'studKey'=>'required',
             'studStatus'=>'required',
+            'studQR'=>'required',
+            'studProfileImg'=>'nullable',
         ]);
 
         $qrurl = 'https://'.$domain.'/public/student/'.$request->studCardID.'?studKey='.$request->studKey;
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/students/qrcodes/').$request->studCardID.'.png');
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/students/qrcodes/').$request->studQR);
 
         return Students::on($client)->create($request->all());
     }

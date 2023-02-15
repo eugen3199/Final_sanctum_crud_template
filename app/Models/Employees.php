@@ -21,6 +21,8 @@ class Employees extends Model
         'empEmgcPhone',
         'empCampusID',
         'empKey',
-        'empStatus'
+        'empStatus',
+        'empQR',
+        'empProfileImg'
     ];
 }

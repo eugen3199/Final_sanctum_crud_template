@@ -20,6 +20,8 @@ class Students extends Model
         'studEmgcPhone2',
         'SchoolEmgcCall',
         'studKey',
-        'studStatus'
+        'studStatus',
+        'studQR',
+        'studProfileImg'
     ];
 }
