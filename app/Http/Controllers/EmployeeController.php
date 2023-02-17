@@ -57,9 +57,10 @@ class EmployeeController extends Controller
         ]);
 
         $response = Employees::on($client)->create($request->all());
-        $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
+        // $qrurl = 'https://'.$domain.'/public/employee/'.$request->empCardID.'?empKey='.$request->empKey;
+        $qrurl = 'https://kbtccollege-my.sharepoint.com/:b:/g/personal/digital_marketing_kbtc_edu_mm/EdQqfVB3bLZOhGlgI3aRAykB65uzLr73AQTpcU80yvAbMA?e=4LOAS4';
         // QrCode::size(200)->format('png')->generate($qrurl, Storage::path('/app/').$request->empCardID.'.png');
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/employees/qrcodes/').$request->empQR);
+        QrCode::size(200)->format('png')->generate($qrurl, public_path('/').$request->empQR);
 
         return $response;
     }
