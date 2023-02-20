@@ -15,8 +15,14 @@ class BatchController extends Controller
         if($request->client=='kbtc'){
             $client="mysql2";
         }
-        else{
+        elseif ($request->client=='isr') {
             $client="mysql3";
+        }
+        elseif ($request->client=='test') {
+            $client="mysql4";
+        }
+        else{
+            return '404 not found';
         }
 
         return Batches::on($client)->get();

@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('clients', function (Blueprint $table) {
-            $table->id();
-            $table->string('clientName');
-            $table->timestamps();
-        });
+        if ( !Schema::connection('mysql')->hasTable('clients') ) {
+            Schema::connection('mysql')->create('clients', function (Blueprint $table) {
+                $table->id();
+                $table->string('clientName');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

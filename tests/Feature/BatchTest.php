@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class BatchTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -26,10 +26,10 @@ class BatchTest extends TestCase
 
     public function test_if_batches_index_works()
     {
-        $register = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123');
+        $register = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123&client=test');
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->post('api/batches?batchName=Pre1&batchClassID=1');
-        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->get('api/batches');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->post('api/batches?batchName=Pre1&batchClassID=1&client=test');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->get('api/batches&client=test');
         $response->assertStatus(200);
     }
 

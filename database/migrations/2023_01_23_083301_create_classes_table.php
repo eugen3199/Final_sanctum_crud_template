@@ -13,19 +13,32 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql3')->create('classes', function (Blueprint $table) {
-            $table->id();
-            $table->string('className');
-            $table->string('classPrefixID');
-            $table->timestamps();
-        });
+        if ( !Schema::connection('mysql3')->hasTable('classes') ) {
+            Schema::connection('mysql3')->create('classes', function (Blueprint $table) {
+                $table->id();
+                $table->string('className');
+                $table->string('classPrefixID');
+                $table->timestamps();
+            });
+        }
 
-        Schema::connection('mysql2')->create('classes', function (Blueprint $table) {
-            $table->id();
-            $table->string('className');
-            $table->string('classPrefixID');
-            $table->timestamps();
-        });
+        if ( !Schema::connection('mysql2')->hasTable('classes') ) {
+            Schema::connection('mysql2')->create('classes', function (Blueprint $table) {
+                $table->id();
+                $table->string('className');
+                $table->string('classPrefixID');
+                $table->timestamps();
+            });
+        }
+
+        if ( !Schema::connection('mysql4')->hasTable('classes') ) {
+            Schema::connection('mysql4')->create('classes', function (Blueprint $table) {
+                $table->id();
+                $table->string('className');
+                $table->string('classPrefixID');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
