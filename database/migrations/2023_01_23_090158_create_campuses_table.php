@@ -13,17 +13,29 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql3')->create('campuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('CampusName');
-            $table->timestamps();
-        });
+        if ( !Schema::connection('mysql3')->hasTable('campuses') ) {
+            Schema::connection('mysql3')->create('campuses', function (Blueprint $table) {
+                $table->id();
+                $table->string('CampusName');
+                $table->timestamps();
+            });
+        }
 
-        Schema::connection('mysql2')->create('campuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('CampusName');
-            $table->timestamps();
-        });
+        if ( !Schema::connection('mysql2')->hasTable('campuses') ) {
+            Schema::connection('mysql2')->create('campuses', function (Blueprint $table) {
+                $table->id();
+                $table->string('CampusName');
+                $table->timestamps();
+            });
+        }
+
+        if ( !Schema::connection('mysql4')->hasTable('campuses') ) {
+            Schema::connection('mysql4')->create('campuses', function (Blueprint $table) {
+                $table->id();
+                $table->string('CampusName');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

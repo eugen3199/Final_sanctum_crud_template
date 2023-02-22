@@ -4,45 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Batches;
+use Illuminate\Support\Facades\Storage;
+use \App\Http\Controllers\ClientController;
 
 class BatchController extends Controller
 {
     public function index(Request $request)
     {
 
-        $client='';
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
 
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
-
-        return Batches::on($client)->get();
+        return Batches::on($cd['client'])->get();
     }
 
     public function store(Request $request)
     {
-        $client='';
-        $domain='';
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
 
-        if($request->client=='kbtc'){
-            $client="mysql2";
-            $domain="id.kbtc.edu.mm";
-        }
-        else{
-            $client="mysql3";
-            $domain="id.isr.edu.mm";
-        }
-
-        $request->validate([
-            'batchName'=>'required',
-            'batchClassID'=>'required',
-            'client'=>'required',
-        ]);
-
-        return Batches::on($client)->create([
+        return Batches::on($cd['client'])->create([
             'batchName'=>$request->batchName,
             'batchClassID'=>$request->batchClassID
         ]);
@@ -50,28 +31,28 @@ class BatchController extends Controller
 
     public function update(Request $request, $id)
     {
-        $Batch = Batches::on($client)->find($id);
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+
+        $Batch = Batches::on($cd['client'])->find($id);
         $Batch->update($request->all());
         return $Batch;
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        return Batches::on($client)->destroy($id);
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+
+        return Batches::on($cd['client'])->delete($id);
     }
 
     public function search($id, Request $request)
     {
-        $client='';
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
 
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
-
-        $batch = Batches::on($client)->where('id','=',$id)->first();
+        $batch = Batches::on($cd['client'])->where('id','=',$id)->first();
         if ($batch === null) {
             return response('Invalid ID', 404)
             ->header('Content-Type', 'text/plain');

@@ -11,31 +11,19 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         return Employees::on($client)->orderBy('empCardID', 'desc')->get();
     }
 
     public function store(Request $request)
     {
-        $client='';
-        $domain='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-            $domain="id.kbtc.edu.mm";
-        }
-        else{
-            $client="mysql3";
-            $domain="id.isr.edu.mm";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         //TODO - Validate Data Types and format
         $request->validate([
@@ -52,7 +40,7 @@ class EmployeeController extends Controller
             'empKey'=>'required',
             'empStatus'=>'required',
             'empQR'=>'required',
-            'studProfileImg'=>'nullable',
+            // 'studProfileImg'=>'nullable',
             'client'=>'required',
         ]);
 
@@ -66,14 +54,9 @@ class EmployeeController extends Controller
 
     public function show($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $employee = Employees::on($client)->find($id);
         if ($employee == Null){
@@ -86,14 +69,9 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $Employee = Employees::on($client)->find($id);
         $Employee->update($request->all());
@@ -102,14 +80,9 @@ class EmployeeController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $employee = Employees::on($client)->destroy($id);
         if ($employee == 1){
@@ -124,14 +97,9 @@ class EmployeeController extends Controller
 
     public function search($empCardID, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $employee = Employees::on($client)->where('empKey', '=', $request->empKey)->where('empCardID','=',$empCardID)->first();
         if ($employee === null) {

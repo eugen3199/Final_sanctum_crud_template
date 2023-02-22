@@ -9,17 +9,10 @@ class PrefixController extends Controller
 {
     public function index()
     {
-        $client='';
-        $domain='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-            $domain="id.kbtc.edu.mm";
-        }
-        else{
-            $client="mysql3";
-            $domain="id.isr.edu.mm";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
         
         return Prefixes::all();
     }

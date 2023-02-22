@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('password_resets', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        if ( !Schema::connection('mysql')->hasTable('password_resets') ) {
+            Schema::connection('mysql')->create('password_resets', function (Blueprint $table) {
+                $table->string('email')->primary();
+                $table->string('token');
+                $table->timestamp('created_at')->nullable();
+            });
+        }
     }
 
     /**

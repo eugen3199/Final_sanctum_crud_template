@@ -11,14 +11,10 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         if($request->filterClassID=='*'){
             return Students::on($client)
@@ -35,17 +31,10 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $client='';
-        $domain='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-            $domain="id.kbtc.edu.mm";
-        }
-        else{
-            $client="mysql3";
-            $domain="id.isr.edu.mm";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         $request->validate([
             'studName'=>'required',
@@ -72,28 +61,20 @@ class StudentController extends Controller
 
     public function show($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         return Students::on($client)->find($id);
     }
 
     public function update(Request $request, $id)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         $Student = Students::on($client)->find($id);
         $Student->update($request->all());
@@ -102,28 +83,20 @@ class StudentController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         return Students::on($client)->destroy($id);
     }
 
     public function search($studCardID, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
 
         $student = Students::on($client)->where('studKey', '=', $request->studKey)->where('studCardID','=',$studCardID)->first();
         if ($student === null) {
