@@ -54,12 +54,16 @@ class CampusController extends Controller
         return Campuses::on($client)->destroy($id);
     }
 
-    public function search($name, Request $request)
+    public function search($id, Request $request)
     {
         $client_controller = new ClientController;
         $cd = $client_controller->check($request->client);
-        $client= $cd['client'];
 
-        return Campuses::on($client)->where('name', 'like', '%'.$name.'%')->get();
+        $campus = Campuses::on($cd['client'])->where('id','=',$id)->first();
+        if ($campus === null) {
+            return response('Invalid ID', 404)
+            ->header('Content-Type', 'text/plain');
+        }
+        return $campus;
     }
 }

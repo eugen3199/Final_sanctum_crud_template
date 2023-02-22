@@ -58,12 +58,16 @@ class PositionController extends Controller
         return Positions::destroy($id);
     }
 
-    public function search($name)
+    public function search($id, Request $request)
     {
         $client_controller = new ClientController;
         $cd = $client_controller->check($request->client);
-        $client= $cd['client'];
-        
-        return Positions::on($client)->where('name', 'like', '%'.$name.'%')->get();
+
+        $position = Positions::on($cd['client'])->where('id','=',$id)->first();
+        if ($position === null) {
+            return response('Invalid ID', 404)
+            ->header('Content-Type', 'text/plain');
+        }
+        return $position;
     }
 }

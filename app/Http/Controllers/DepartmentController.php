@@ -92,17 +92,16 @@ class DepartmentController extends Controller
         return Departments::destroy($id);
     }
 
-    public function search($name)
+    public function search($id, Request $request)
     {
-        $client='';
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
 
-        if($request->client=='kbtc'){
-            $client="mysql2";
+        $department = Departments::on($cd['client'])->where('id','=',$id)->first();
+        if ($department === null) {
+            return response('Invalid ID', 404)
+            ->header('Content-Type', 'text/plain');
         }
-        else{
-            $client="mysql3";
-        }
-        
-        return Departments::on($client)->where('name', 'like', '%'.$name.'%')->get();
+        return $department;
     }
 }

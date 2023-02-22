@@ -32,6 +32,9 @@ Route::get('students/search/{studCardID}', [StudentController::class, 'search'])
 Route::get('classes/search/{id}', [ClassController::class, 'search']);
 Route::get('batches/search/{id}', [BatchController::class, 'search']);
 Route::get('prefixes/search/{id}', [PrefixController::class, 'search']);
+Route::get('campuses/search/{id}', [CampusController::class, 'search']);
+Route::get('departments/search/{id}', [DepartmentController::class, 'search']);
+Route::get('positions/search/{id}', [PositionController::class, 'search']);
 
 // Private Routes
 Route::group(['middleware'=>['auth:sanctum']], function(){
