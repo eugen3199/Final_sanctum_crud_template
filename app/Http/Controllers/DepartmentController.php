@@ -10,28 +10,18 @@ class DepartmentController extends Controller
 {
     public function index(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         return Departments::on($client)->get();
     }
 
     public function store(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $request->validate([
             'deptName'=>'required',

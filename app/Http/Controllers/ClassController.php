@@ -10,31 +10,19 @@ class ClassController extends Controller
 {
     public function index(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         return Classes::on($client)->get();
     }
 
     public function store(Request $request)
     {
-        $client='';
-        $domain='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-            $domain="id.kbtc.edu.mm";
-        }
-        else{
-            $client="mysql3";
-            $domain="id.isr.edu.mm";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain= $cd['domain'];
 
         $request->validate([
             'className'=>'required',
@@ -64,9 +52,13 @@ class ClassController extends Controller
 
     public function update(Request $request, $id)
     {
-        $Batch = Classes::find($id);
-        $Batch->update($request->all());
-        return $Batch;
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+
+        $Class = Classes::on($client)->find($id);
+        $Class->update($request->all());
+        return $Class;
     }
 
     public function destroy($id)
@@ -76,14 +68,9 @@ class ClassController extends Controller
 
     public function search($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $class = Classes::on($client)->where('id','=',$id)->first();
         if ($class === null) {

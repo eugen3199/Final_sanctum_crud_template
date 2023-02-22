@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        if ( !Schema::connection('mysql')->hasTable('personal_access_tokens') ) {
+        if ( !Schema::connection('mysql')->hasTable('users') ) {
             Schema::connection('mysql')->create('users', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');

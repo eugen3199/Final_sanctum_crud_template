@@ -9,28 +9,18 @@ class PositionController extends Controller
 {
     public function index(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         return Positions::on($client)->get();
     }
 
     public function store(Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         $request->validate([
             'posName'=>'required'
@@ -41,28 +31,18 @@ class PositionController extends Controller
 
     public function show($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         return Positions::on($client)->find($id);
     }
 
     public function update(Request $request, $id)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
         
         $Department = Positions::on($client)->find($id);
         $Department->update($request->all());
@@ -71,28 +51,18 @@ class PositionController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
 
         return Positions::destroy($id);
     }
 
     public function search($name)
     {
-        $client='';
-
-        if($request->client=='kbtc'){
-            $client="mysql2";
-        }
-        else{
-            $client="mysql3";
-        }
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
         
         return Positions::on($client)->where('name', 'like', '%'.$name.'%')->get();
     }
