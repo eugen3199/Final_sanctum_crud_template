@@ -84,8 +84,9 @@ class EmployeeController extends Controller
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
 
-        $employee = Employees::on($client)->delete($id);
-        if ($employee == 1){
+        $employee = Employees::on($client)->find($id);
+        if ($employee != null){
+            $employee->delete();
             return response('Employee with ID:'.$id.' successfully deleted', 200)
                 ->header('Content-Type', 'text/plain');
         }

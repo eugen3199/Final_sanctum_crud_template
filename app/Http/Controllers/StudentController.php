@@ -86,9 +86,17 @@ class StudentController extends Controller
         $client_controller = new ClientController;
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
-        $domain = $cd['domain'];
 
-        return Students::on($client)->delete($id);
+        $student = Students::on($client)->find($id);
+        if ($student != null){
+            $student->delete();
+            return response('Student with ID:'.$id.' successfully deleted', 200)
+                ->header('Content-Type', 'text/plain');
+        }
+        else{
+            return response('Student with ID:'.$id.' does not exist', 404)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 
     public function search($studCardID, Request $request)
