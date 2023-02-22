@@ -88,7 +88,7 @@ class StudentController extends Controller
         $client= $cd['client'];
         $domain = $cd['domain'];
 
-        return Students::on($client)->destroy($id);
+        return Students::on($client)->delete($id);
     }
 
     public function search($studCardID, Request $request)
