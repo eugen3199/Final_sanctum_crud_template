@@ -15,7 +15,9 @@ class EmployeeController extends Controller
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
 
-        return Employees::on($client)->orderBy('empCardID', 'desc')->get();
+        $employees = Employees::on($client)->orderBy('empCardID', 'desc')->paginate(10);
+
+        return $employees;
     }
 
     public function store(Request $request)
