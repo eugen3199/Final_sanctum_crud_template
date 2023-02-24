@@ -19,13 +19,13 @@ class StudentController extends Controller
         if($request->filterClassID=='*'){
             return Students::on($client)
                 ->orderBy('studCardID', 'desc')
-                ->paginate(10);
+                ->paginate(15);
         }
         else{
             return Students::on($client)
                 ->orderBy('studCardID', 'desc')
                 ->where('studClassID', '=', $request->filterClassID)
-                ->get();
+                ->paginate(15);
         }
     }
 
