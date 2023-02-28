@@ -39,7 +39,9 @@ Route::get('positions/search/{id}', [PositionController::class, 'search']);
 // Private Routes
 Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('employees/query', [EmployeeController::class, 'query']);
     Route::resource('employees', EmployeeController::class);
+    Route::get('students/query', [StudentController::class, 'query']);
     Route::resource('students', StudentController::class);
     Route::resource('campuses', CampusController::class);
     Route::resource('batches', BatchController::class);

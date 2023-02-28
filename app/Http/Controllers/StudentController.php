@@ -19,13 +19,13 @@ class StudentController extends Controller
         if($request->filterClassID=='*'){
             return Students::on($client)
                 ->orderBy('studCardID', 'desc')
-                ->get();
+                ->paginate(15);
         }
         else{
             return Students::on($client)
                 ->orderBy('studCardID', 'desc')
                 ->where('studClassID', '=', $request->filterClassID)
-                ->get();
+                ->paginate(15);
         }
     }
 
@@ -112,5 +112,37 @@ class StudentController extends Controller
             ->header('Content-Type', 'text/plain');
         }
         return Students::on($client)->where('studCardID', $studCardID)->get();
+    }
+
+    public function query(Request $request)
+    {
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
+
+        $search_value = $request->search_value; // searchstring
+
+        $studName = Students::on($cd['client'])
+        ->where('studName', 'LIKE', '%'.$search_value.'%');
+
+        $studGuardName = Students::on($cd['client'])
+            ->where('studGuardName', 'LIKE', '%'.$search_value.'%');
+
+        $studEmgcPhone2 = Students::on($cd['client'])
+            ->where('studEmgcPhone2', 'LIKE', '%'.$search_value.'%');
+
+        $studEmgcPhone1 = Students::on($cd['client'])
+            ->where('studEmgcPhone1', 'LIKE', '%'.$search_value.'%');
+
+        $search = Students::on($cd['client'])
+            ->where('studCardID', 'LIKE', '%'.$search_value.'%')
+            ->union($studName)
+            ->union($studGuardName)
+            ->union($studEmgcPhone1)
+            ->union($studEmgcPhone2)
+            ->paginate(20);
+
+        return $search;
     }
 }

@@ -15,7 +15,9 @@ class EmployeeController extends Controller
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
 
-        return Employees::on($client)->orderBy('empCardID', 'desc')->get();
+        $employees = Employees::on($client)->orderBy('empCardID', 'desc')->paginate(10);
+
+        return $employees;
     }
 
     public function store(Request $request)
@@ -40,7 +42,7 @@ class EmployeeController extends Controller
             'empKey'=>'required',
             'empStatus'=>'required',
             'empQR'=>'required',
-            // 'studProfileImg'=>'nullable',
+            // 'empProfileImg'=>'nullable',
             'client'=>'required',
         ]);
 
@@ -108,5 +110,41 @@ class EmployeeController extends Controller
             ->header('Content-Type', 'text/plain');
         }
         return Employees::on($client)->where('empCardID', $empCardID)->get();
+    }
+
+    public function query(Request $request)
+    {
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
+
+        $search_value = $request->search_value; // searchstring
+
+        $empName = Employees::on($cd['client'])
+        ->where('empName', 'LIKE', '%'.$search_value.'%');
+
+        $empNRC = Employees::on($cd['client'])
+            ->where('empNRC', 'LIKE', '%'.$search_value.'%');
+
+        $empEmgcPerson = Employees::on($cd['client'])
+            ->where('empEmgcPerson', 'LIKE', '%'.$search_value.'%');
+
+        $empEmgcPhone = Employees::on($cd['client'])
+            ->where('empEmgcPhone', 'LIKE', '%'.$search_value.'%');
+
+        $empJoinDate = Employees::on($cd['client'])
+            ->where('empJoinDate', 'LIKE', '%'.$search_value.'%');
+
+        $search = Employees::on($cd['client'])
+            ->where('empCardID', 'LIKE', '%'.$search_value.'%')
+            ->union($empName)
+            ->union($empNRC)
+            ->union($empEmgcPerson)
+            ->union($empEmgcPhone)
+            ->union($empJoinDate)
+            ->paginate(20);
+
+        return $search;
     }
 }
