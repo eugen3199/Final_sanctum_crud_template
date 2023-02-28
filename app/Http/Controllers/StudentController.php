@@ -121,22 +121,28 @@ class StudentController extends Controller
         $client= $cd['client'];
         $domain = $cd['domain'];
 
-        $query = Students::on($cd['client'])->all(); // Get all data of the class
+        $search_value = $request->search_value; // searchstring
 
-        $search_value = $request->query; // searchstring
-        $columns = array('studName', 'studCardID', 'studGuardName', 'studEmgcPhone1', 'studEmgcPhone2'); // could also be used like $columns = ['test', 'test2'];
+        $studName = Students::on($cd['client'])
+        ->where('studName', 'LIKE', '%'.$search_value.'%');
 
-        $resultsarray = array();
+        $studGuardName = Students::on($cd['client'])
+            ->where('studGuardName', 'LIKE', '%'.$search_value.'%');
 
-            foreach ($columns as $column) {
-                $results = Students::on($cd['client'])->all()->where($column, $search_value);
-                if ($results != '[]') {
-                    array_push($resultsarray, $results);
-                }
-            }
+        $studEmgcPhone2 = Students::on($cd['client'])
+            ->where('studEmgcPhone2', 'LIKE', '%'.$search_value.'%');
 
-        $result = $resultsarray;
-        return $result->paginate(15);
-        return $client;
+        $studEmgcPhone1 = Students::on($cd['client'])
+            ->where('studEmgcPhone1', 'LIKE', '%'.$search_value.'%');
+
+        $search = Students::on($cd['client'])
+            ->where('studCardID', 'LIKE', '%'.$search_value.'%')
+            ->union($studName)
+            ->union($studGuardName)
+            ->union($studEmgcPhone1)
+            ->union($studEmgcPhone2)
+            ->paginate(20);
+
+        return $search;
     }
 }
