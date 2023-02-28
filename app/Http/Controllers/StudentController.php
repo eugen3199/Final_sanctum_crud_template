@@ -113,4 +113,30 @@ class StudentController extends Controller
         }
         return Students::on($client)->where('studCardID', $studCardID)->get();
     }
+
+    public function query(Request $request)
+    {
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
+
+        $query = Students::on($cd['client'])->all(); // Get all data of the class
+
+        $search_value = $request->query; // searchstring
+        $columns = array('studName', 'studCardID', 'studGuardName', 'studEmgcPhone1', 'studEmgcPhone2'); // could also be used like $columns = ['test', 'test2'];
+
+        $resultsarray = array();
+
+            foreach ($columns as $column) {
+                $results = Students::on($cd['client'])->all()->where($column, $search_value);
+                if ($results != '[]') {
+                    array_push($resultsarray, $results);
+                }
+            }
+
+        $result = $resultsarray;
+        return $result->paginate(15);
+        return $client;
+    }
 }
