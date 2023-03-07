@@ -89,7 +89,16 @@ class DepartmentController extends Controller
             $client="mysql3";
         }
 
-        return Departments::destroy($id);
+        $department = Departments::on($client)->find($id);
+        if ($department != null){
+            $department->delete();
+            return response('Department with ID:'.$id.' successfully deleted', 200)
+                ->header('Content-Type', 'text/plain');
+        }
+        else{
+            return response('Department with ID:'.$id.' does not exist', 404)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 
     public function search($id, Request $request)

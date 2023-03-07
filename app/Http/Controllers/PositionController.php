@@ -55,7 +55,16 @@ class PositionController extends Controller
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
 
-        return Positions::destroy($id);
+        $position = Positions::on($client)->find($id);
+        if ($position != null){
+            $position->delete();
+            return response('Position with ID:'.$id.' successfully deleted', 200)
+                ->header('Content-Type', 'text/plain');
+        }
+        else{
+            return response('Position with ID:'.$id.' does not exist', 404)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 
     public function search($id, Request $request)
