@@ -61,9 +61,22 @@ class ClassController extends Controller
         return $Class;
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        return Classes::destroy($id);
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+
+        $class = Classes::on($client)->find($id);
+        if ($class != null){
+            $class->delete();
+            return response('Class with ID:'.$id.' successfully deleted', 200)
+                ->header('Content-Type', 'text/plain');
+        }
+        else{
+            return response('Class with ID:'.$id.' does not exist', 404)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 
     public function search($id, Request $request)

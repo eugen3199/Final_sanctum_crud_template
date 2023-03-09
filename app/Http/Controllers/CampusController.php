@@ -51,7 +51,17 @@ class CampusController extends Controller
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
 
-        return Campuses::on($client)->destroy($id);
+        $campus = Campuses::on($client)->find($id);
+        if ($campus != null){
+            $campus->delete();
+            return response('Campus with ID:'.$id.' successfully deleted', 200)
+                ->header('Content-Type', 'text/plain');
+        }
+        else{
+            return response('Campus with ID:'.$id.' does not exist', 404)
+                ->header('Content-Type', 'text/plain');
+        }
+
     }
 
     public function search($id, Request $request)

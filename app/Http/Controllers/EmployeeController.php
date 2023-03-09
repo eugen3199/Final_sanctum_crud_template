@@ -42,7 +42,7 @@ class EmployeeController extends Controller
             'empKey'=>'required',
             'empStatus'=>'required',
             'empQR'=>'required',
-            // 'empProfileImg'=>'nullable',
+            'empProfileImg'=>'required',
             'client'=>'required',
         ]);
 

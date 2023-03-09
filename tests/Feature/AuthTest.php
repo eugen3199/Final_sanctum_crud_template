@@ -18,22 +18,22 @@ class AuthTest extends TestCase
     //Authentication Test
     public function test_if_register_works()
     {
-        $response = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123');
+        $response = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123&client=test');
         $response->assertStatus(201);
     }
 
     public function test_if_logout_works()
     {
-        $register = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123');
-        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->post('api/logout');
+        $register = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123&client=test');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->post('api/logout&client=test');
         $response->assertStatus(200);
     }
 
     public function test_if_login_works(Type $var = null)
     {
-        $register = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123');
-        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->post('api/logout');
-        $login = $this->post('api/login?email=test1@gmail.com&password=123');
+        $register = $this->post('api/register?name=test1&email=test1@gmail.com&password=123&password_confirmation=123&client=test');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->post('api/logout&client=test');
+        $login = $this->post('api/login?email=test1@gmail.com&password=123&client=test');
         $response->assertStatus(200);
     }
 }
