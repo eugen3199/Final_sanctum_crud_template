@@ -200,6 +200,9 @@ return [
         //QR Code
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
+        //Excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
     ],
 
     /*
@@ -216,6 +219,10 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+
+        //Excel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        
     ])->toArray(),
 
 ];

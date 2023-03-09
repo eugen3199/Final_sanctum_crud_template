@@ -147,4 +147,20 @@ class EmployeeController extends Controller
 
         return $search;
     }
+
+    public function preview(Request $request)
+    {
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
+    }
+
+    public function import(Request $request)
+    {
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
+    }
 }
