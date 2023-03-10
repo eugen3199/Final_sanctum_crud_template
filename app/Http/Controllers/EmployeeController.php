@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Employees;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportEmployee;
+use App\Imports\ImportEmployee;
 
 class EmployeeController extends Controller
 {
@@ -162,5 +165,19 @@ class EmployeeController extends Controller
         $cd = $client_controller->check($request->client);
         $client= $cd['client'];
         $domain = $cd['domain'];
+
+        Excel::import(new ImportEmployee($cd['client'], $cd['domain']), $request->file);
+
+        return back()->withStatus('File imported successfully');
+    }
+
+    public function export(Request $request, \Maatwebsite\Excel\Excel $file)
+    {
+        $client_controller = new ClientController;
+        $cd = $client_controller->check($request->client);
+        $client= $cd['client'];
+        $domain = $cd['domain'];
+
+        return $file->download(new ExportEmployee($cd['client']), 'Employees.xlsx');
     }
 }

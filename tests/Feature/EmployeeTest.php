@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeTest extends TestCase
 {
@@ -71,5 +72,24 @@ class EmployeeTest extends TestCase
         $response = $this->withHeader('Authorization', 'Bearer ' . $register['token'])->delete('api/employees/'.$response['id'].'?client=test');
 
         $response->assertStatus(200);
+    }
+
+    public function test_if_can_import_employees() 
+    {
+        Excel::fake();
+        
+        $this->actingAs($this->givenEmployee())
+             ->get('/employees/import/xlsx');
+
+        Excel::assertImported('filename.xlsx', 'diskName');
+        
+        Excel::assertImported('filename.xlsx', 'diskName', function(ImportEmployee $import) {
+            return true;
+        });
+        
+        // When passing the callback as 2nd param, the disk will be the default disk.
+        Excel::assertImported('filename.xlsx', function(EmployeeImport $import) {
+            return true;
+        });
     }
 }

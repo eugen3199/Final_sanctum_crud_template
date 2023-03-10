@@ -35,6 +35,8 @@ Route::get('prefixes/search/{id}', [PrefixController::class, 'search']);
 Route::get('campuses/search/{id}', [CampusController::class, 'search']);
 Route::get('departments/search/{id}', [DepartmentController::class, 'search']);
 Route::get('positions/search/{id}', [PositionController::class, 'search']);
+Route::get('employees/export', [EmployeeController::class, 'export']);
+Route::post('employees/import', [EmployeeController::class, 'import']);
 
 // Private Routes
 Route::group(['middleware'=>['auth:sanctum']], function(){
@@ -49,7 +51,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::resource('prefixes', PrefixController::class);
     Route::resource('departments', DepartmentController::class);
     Route::resource('positions', PositionController::class);
-    // Route::resource('users', UserController::class);
+    
 });
 
 
