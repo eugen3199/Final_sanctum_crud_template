@@ -3,6 +3,9 @@
 namespace App\Imports;
 
 use App\Models\Employees;
+use App\Models\Campuses;
+use App\Models\Departments;
+use App\Models\Positions;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -34,6 +37,19 @@ class ImportEmployee implements ToModel, WithHeadingRow
         // $message = var_dump($row);
         // Log::debug($message);
 
+        $campus = Campuses::on($this->client)->firstOrCreate(
+            ['campusName' => $row['campus']]
+        );
+
+        $department = Departments::on($this->client)->firstOrCreate(
+            ['deptName' => $row['department']],
+            ['deptPrefixID' => 'Test']
+        );
+
+        $position = Positions::on($this->client)->firstOrCreate(
+            ['posName' => $row['position']]
+        );
+
         $empqr = $row['card_id'].'_'.time();
         $response = Employees::on($this->client)->updateOrCreate(
             [
@@ -41,9 +57,9 @@ class ImportEmployee implements ToModel, WithHeadingRow
             ], 
             [
                 'empName' => $row['name'],
-                'empCampusID' => $row['campus'],
-                'empDeptID' => $row['department'],
-                'empPosID' => $row['position'],
+                'empCampusID' => $campus->id,
+                'empDeptID' => $department->id,
+                'empPosID' => $position->id,
                 'empJoinDate' => $row['join_date'],
                 'empNRC' => $row['nrc'],
                 'empPhone' => $row['phone_no'],
@@ -56,8 +72,9 @@ class ImportEmployee implements ToModel, WithHeadingRow
             ]
         );
 
-        $qrurl = 'https://'.$this->domain.'/public/employee/'.$row['card_id'].'?empKey='.$empKey;
-        QrCode::size(200)->format('png')->generate($qrurl, public_path('/employees/qrcodes/').$empqr);
+        //QR Creation (Uncomment after testing)
+        // $qrurl = 'https://'.$this->domain.'/public/employee/'.$row['card_id'].'?empKey='.$empKey;
+        // QrCode::size(200)->format('png')->generate($qrurl, public_path('/employees/qrcodes/').$empqr);
 
         return $response;
     }
