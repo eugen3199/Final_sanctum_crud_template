@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportEmployee;
 use App\Imports\ImportEmployee;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -166,9 +167,14 @@ class EmployeeController extends Controller
         $client= $cd['client'];
         $domain = $cd['domain'];
 
+        // $message = var_dump($request->file->getClientOriginalName());
+        // Log::debug($message);
+
         Excel::import(new ImportEmployee($cd['client'], $cd['domain']), $request->file);
 
-        return back()->withStatus('File imported successfully');
+        // return back()->withStatus('File imported successfully');
+        return response('Imported successfully', 200)
+                ->header('Content-Type', 'text/plain');
     }
 
     public function export(Request $request, \Maatwebsite\Excel\Excel $file)

@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ExportEmployee implements FromCollection, WithMapping, ShouldAutoSize
+class ExportEmployee implements FromCollection, WithMapping, ShouldAutoSize, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -31,7 +31,7 @@ class ExportEmployee implements FromCollection, WithMapping, ShouldAutoSize
             'Position',
             'Join Date',
             'NRC',
-            'Phone_No.',
+            'Phone No.',
             'Emergency Contact Person',
             'Emergency Contact No.'
         ];

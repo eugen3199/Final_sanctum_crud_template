@@ -6,9 +6,11 @@ use App\Models\Employees;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Log;
 
-class ImportEmployee implements ToModel
+class ImportEmployee implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -27,25 +29,34 @@ class ImportEmployee implements ToModel
 
     public function model(array $row)
     {
-        $empqr = $row[0].'_'.time();
-        $response = Employees::on($this->client)->create([
-            'empCardID' => $row[0],
-            'empName' => $row[1],
-            'empCampusID' => $row[2],
-            'empDeptID' => $row[3],
-            'empPosID' => $row[4],
-            'empJoinDate' => $row[5],
-            'empNRC' => $row[6],
-            'empPhone' => $row[7],
-            'empEmgcPerson' => $row[8],
-            'empEmgcPhone' => $row[9],
-            'empKey' => '123456',
-            'empStatus' => 1,
-            'empQR' => $empqr,
-            'empProfileImg' => 'None'
-        ]);
+        $data = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
+        $empKey = substr(str_shuffle($data), 0, 30);
+        // $message = var_dump($row);
+        // Log::debug($message);
 
-        $qrurl = 'https://'.$this->domain.'/public/employee/'.$row[0].'?empKey=123456';
+        $empqr = $row['card_id'].'_'.time();
+        $response = Employees::on($this->client)->updateOrCreate(
+            [
+                'empCardID' => $row['card_id']
+            ], 
+            [
+                'empName' => $row['name'],
+                'empCampusID' => $row['campus'],
+                'empDeptID' => $row['department'],
+                'empPosID' => $row['position'],
+                'empJoinDate' => $row['join_date'],
+                'empNRC' => $row['nrc'],
+                'empPhone' => $row['phone_no'],
+                'empEmgcPerson' => $row['emergency_contact_person'],
+                'empEmgcPhone' => $row['emergency_contact_no'],
+                'empKey' => $empKey,
+                'empStatus' => 1,
+                'empQR' => $empqr,
+                'empProfileImg' => 'None'
+            ]
+        );
+
+        $qrurl = 'https://'.$this->domain.'/public/employee/'.$row['card_id'].'?empKey='.$empKey;
         QrCode::size(200)->format('png')->generate($qrurl, public_path('/employees/qrcodes/').$empqr);
 
         return $response;
